@@ -18,10 +18,6 @@ int valid_addr(const void* start, size_t count, uintptr_t base, uintptr_t bound)
 
 // Assembly function declaration
 void Usermode(int argc, char *argv[]);		// declares Usermode which prepares for and runs user app
-void restore();					// returns from user app and restores some svc registers
-
-// exit status
-//extern int ExitStatus;				// stores exit status from user app to kernel to system
 
 
 #endif /* KERNEL_H */

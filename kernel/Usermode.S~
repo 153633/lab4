@@ -15,6 +15,11 @@ Usermode:
 
 		ldr	r4, =rr8	@ added by lu
 		str	r8, [r4]
+	
+		ldr	r4, =link       @ Store the lr to a globle value
+		str     lr, [r4]        @ Restore lr in the function exit()
+
+
    
 		bic     r5, r5, #0xff   
 	    	orr     r5, r5, #0x50
