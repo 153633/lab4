@@ -73,16 +73,16 @@ int main(int argc,char* argv[]) {
 			writeResult = write(STDOUT_FILENO, outBuffer + N, 1);
 
 		if (writeResult < 0) {					// as long as error occurs in write, it terminates with status 1
-			//exit(1);
+			return 1;
 		}
 
         }       
                                   
         if (readResult == 0) {    	// if zero byte is read, exit with status 0                                                                 
-                //exit(0);                          
+                return 1;                          
         }                                         
         else if (readResult < 0) {      // terminate with status 1
-                //exit(1);                                               
+                return 1;                                               
         }  
                   
         return 1;

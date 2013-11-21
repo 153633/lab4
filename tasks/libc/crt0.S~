@@ -10,5 +10,13 @@
 
 	.file "crt0.S"
 
-FUNC(_start)
-	@ needs code.  Put your names at the top.
+	.text
+
+	.global	_start
+
+_start:
+	ldr	r0, [sp]	@ load argc
+	add	r1, sp, #4	@ load argv
+	bl 	main		@ call main routine, return value at r0
+ label:
+        loop label
