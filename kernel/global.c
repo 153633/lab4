@@ -6,14 +6,15 @@
 // Date:    10/23/2013
 
 #include <types.h>
+#include <userConst.h>
 
 // user
 uint32_t rr8 = 0;
 
 // syscall return
-int32_t value = 0 ;
+int value = 0 ;
 
 // system time
-volatile uint32_t system_time = 0;
+unsigned int system_time = 0;
 
 

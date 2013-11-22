@@ -11,11 +11,10 @@
 #ifndef HIJACK_H
 #define HIJACK_H
 
-extern void install_handler();				// "Wire in" my own SWI handler
-extern void setup();
-extern void install_irqhandler();
-extern void IRQ_Handler();
-extern void C_IRQ_Handler();
+extern int install_handler();				// "Wire in" my own SWI handler
+
+extern int install_irqhandler();
+
 
 
 #endif

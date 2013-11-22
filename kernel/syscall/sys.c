@@ -24,7 +24,7 @@ int getSWI(int num, int *sp) {
 			sleep_syscall((unsigned int) *sp);
 			return 0; 
 		default:
-			break;
+			break; //tanke into account invalid syscalls
 	}
 	return 0;
 }

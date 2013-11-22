@@ -10,8 +10,13 @@
 
 #include <types.h>
 
+/*
 // mode change
-//:extern uint32_t link;				// stores the old svc link register, which has the address of next instruction after calling user app in kernel
+extern uint32_t oldspsr;			// stores the old svc spsr
+extern uint32_t oldsp;				// stores the old svc sp
+extern uint32_t link;				// stores the old svc link register, which has the address of next instruction after calling user app in kernel
+*/
+
 extern uint32_t rr8;				// stores r8 before swi
 // return status
 extern int value;				// stores return value to S_Handler

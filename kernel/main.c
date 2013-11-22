@@ -7,7 +7,7 @@
  *	   
  * @date   
  */
- 
+#include <exports.h>
 #include <kernel.h>
 #include <task.h>
 #include <sched.h>
@@ -26,8 +26,15 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 	
 
 	// hijack
-	install_handler();			// "Wire in" my own SWI handler
-	install_irqhandler();			// wire in irq handlers
+	if (install_handler() != 0) {		// "Wire in" my own SWI handler
+		puts("Bad Code!\n");
+		while(1);
+	}
+			
+	if (install_irqhandler() != 0) {	// wire in irq handlers
+		puts("Bad Code!\n");
+		while(1);
+	}
 	
 	// user
 	Usermode(argc, argv);			// Change the mode to user mode, set the user stack and jump to user program. 

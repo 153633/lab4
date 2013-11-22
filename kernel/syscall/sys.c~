@@ -10,7 +10,7 @@
 #include <bits/swi.h>
 #include <bits/fileno.h>
 #include <bits/errno.h>
-
+#include <syscall.h>
 
 int getSWI(int num, int *sp) {
 	switch(num) {

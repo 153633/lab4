@@ -7,32 +7,26 @@
  * Date:    11/09/2013
  */
 
-#include <exports.h>
+//#include <exports.h>
 
 //#include <arm/exception.h>
-#include <arm/interrupt.h>
-#include <arm/timer.h>
-#include <arm/reg.h>
-
 #include <hijackConst.h>
 //#include <exit_sys_asm.h>
-#include <systime.h>
 
-void install_handler();				// "Wire in" my own SWI handler
-void setup();
-void install_irqhandler();
-void IRQ_Handler();
-void C_IRQ_Handler();
+
+int install_handler();				// "Wire in" my own SWI handler
+int install_irqhandler();
+
 
 
 // hijack the Uboot's swi handler
-void install_handler() {
+int install_handler() {
 	int *swi_entry = (int *)VECTORTABLE_SWI_ENTRY;			// swi vector
 
 	if ((((*swi_entry) ^ LOAD_PC_PC_PLUS_OFFSET_MASK) & 0xfffff000) == 0) {		// check the instruction at swi vector to see if it's legal 
 	} else if ((((*swi_entry) ^ LOAD_PC_PC_MINUS_OFFSET_MASK) & 0xfffff000) == 0) {
 	} else {
-		//exit_sys_asm(0x0badc0de);					// if illegal, exit with status 0x0badc0de
+		return 0x0badc0de;					// if illegal, exit with status 0x0badc0de
 	}
 	
 	int offset = (*swi_entry) & 0x0fff;
@@ -48,32 +42,20 @@ void install_handler() {
 	*iaddrptr = LOAD_PC_PC_4_ENCODING;				// hijack using 'ldr pc, [pc, #-4]'
 	*(iaddrptr+1) = (int)S_Handler;					// hijsck using address of our swi handler
 
-}
-
-
-// Setup for the interrupt controller and timer
-void setup() {
-	// Setup the interrupt controller
-	reg_write(INT_ICMR_ADDR, 0x04000000);		// only enable the interrupt of os timer0
-	reg_write(INT_ICLR_ADDR, 0);			// set all interrupt to IRQ
-
-	// Setup the timer
-	reg_write(OSTMR_OSCR_ADDR, 0);			// reset the OSCR
-	reg_write(OSTMR_OSMR_ADDR(0), FREQ_MS * SYSTIME_PRECISION);		// set the initial OSMR0 to 32500, so it will trigger an interrupt every 10ms
-
-	reg_write(OSTMR_OIER_ADDR, OSTMR_OIER_E0);	// only enable the interrupt of OSMR0
-	reg_write(OSTMR_OSSR_ADDR, OSTMR_OSSR_M0);	// clear the bit initially
+	return 0;
 
 }
+
+
 
 // hijack the Uboot's IRQ handler
-void install_irqhandler() {
+int install_irqhandler() {
 	int *swi_entry = (int *)VECTORTABLE_IRQ_ENTRY;			// IRQ vector
 
 	if ((((*swi_entry) ^ LOAD_PC_PC_PLUS_OFFSET_MASK) & 0xfffff000) == 0) {		// check the instruction at IRQ vector to see if it's legal 
 	} else if ((((*swi_entry) ^ LOAD_PC_PC_MINUS_OFFSET_MASK) & 0xfffff000) == 0) {
 	} else {
-		//exit_sys_asm(0x0badc0de);					// if illegal, exit with status 0x0badc0de
+		return 0x0badc0de;					// if illegal, exit with status 0x0badc0de
 	}
 	
 	int offset = (*swi_entry) & 0x0fff;
@@ -88,11 +70,7 @@ void install_irqhandler() {
 	
 	*iaddrptr = LOAD_PC_PC_4_ENCODING;				// hijack using 'ldr pc, [pc, #-4]'
 	*(iaddrptr+1) = (int)IRQ_Handler;				// hijsck using address of our IRQ handler
-
+	
+	return 0;
 }
 
-void C_IRQ_Handler() {
-	system_time++;
-	reg_write(OSTMR_OSCR_ADDR, 0);			// reset the OSCR
-	reg_set(OSTMR_OSSR_ADDR, 1);
-}
