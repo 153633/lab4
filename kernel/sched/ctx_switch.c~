@@ -53,7 +53,7 @@ void dispatch_save(void)
  */
 void dispatch_nosave(void)
 {
-	//ctx_switch_half();
+	ctx_switch_half
 }
 
 

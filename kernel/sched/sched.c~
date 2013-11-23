@@ -71,19 +71,18 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 
 	system_tcb[IDLE_PRIO].native_prio = IDLE_PRIO;
 	system_tcb[IDLE_PRIO].cur_prio = IDLE_PRIO;
-	system_tcb[IDLE_PRIO].context.r4 = (uint32_t) idle;
-	system_tcb[IDLE_PRIO].context.r5 = 0;
-	system_tcb[IDLE_PRIO].context.r6 = 0;
-	system_tcb[IDLE_PRIO].context.r7 = 0;
-	system_tcb[IDLE_PRIO].context.r8 = 0;
-	system_tcb[IDLE_PRIO].context.r9 = 0;
-	system_tcb[IDLE_PRIO].context.r10 = 0;
-	system_tcb[IDLE_PRIO].context.r11 = 0;
-	system_tcb[IDLE_PRIO].context.sp = 0;
-	system_tcb[IDLE_PRIO].context.lr = (void *)launch_task;
+	system_tcb[index].context.r4 = (uint32_t) idle;
+	system_tcb[index].context.r5 = 0;
+	system_tcb[index].context.r6 = 0;
+	system_tcb[index].context.r7 = 0;
+	system_tcb[index].context.r8 = 0;
+	system_tcb[index].context.r9 = 0;
+	system_tcb[index].context.r10 = 0;
+	system_tcb[index].context.r11 = 0;
+	system_tcb[index].context.sp = 0;
+	system_tcb[index].context.lr = (void *)launch_task;
 	runqueue_add(&system_tcb[IDLE_PRIO], system_tcb[IDLE_PRIO].native_prio);
 	
-	dispatch_init(&system_tcb[IDLE_PRIO]);
 	dispatch_nosave();
 }
 
