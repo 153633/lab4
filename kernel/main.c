@@ -1,4 +1,4 @@
-/** @file main.c
+/* @file main.c
  *
  * @brief kernel main
  *
@@ -16,6 +16,7 @@
 #include <hijack.h>
 
 uint32_t global_data;
+tcb_t kernel_tcb[4]; 
 
 int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused)), uint32_t table)
 {

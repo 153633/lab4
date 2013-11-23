@@ -12,7 +12,6 @@
 #include <task.h>
 #include <sched.h>
 #include <device.h>
-#include <systime.h>
 #include <arm/reg.h>
 #include <arm/psr.h>
 #include <arm/exception.h>
@@ -46,11 +45,8 @@ static dev_t devices[NUM_DEVICES];
  */
 void dev_init(void)
 {
-	int i;
-	for (i = 0; i < NUM_DEVICES; i++) {
-		devices[i].sleep_queue = (void *)0;
-		devices[i].next_match =system_time+dev_freq[i]; 	
-	}
+   /* the following line is to get rid of the warning and should not be needed */	
+   devices[0]=devices[0];
 }
 
 
@@ -58,19 +54,11 @@ void dev_init(void)
  * @brief Puts a task to sleep on the sleep queue until the next
  * event is signalled for the device.
  *
- * @param dev  Devisece number.
+ * @param dev  Device number.
  */
-void dev_wait(unsigned int dev)
+void dev_wait(unsigned int dev __attribute__((unused)))
 {
-	tcb_t* tmp = devices[dev].sleep_queue;
-	while (1) {
-		if(tmp == (void *)0) {
-			tmp = runqueue_remove(get_cur_prio());
-			break;
-		}
-		tmp = tmp->sleep_queue;
-	}
-	dispatch_sleep();	
+	
 }
 
 
@@ -81,15 +69,8 @@ void dev_wait(unsigned int dev)
  * interrupt corresponded to the interrupt frequency of a device, this 
  * function should ensure that the task is made ready to run 
  */
-void dev_update(unsigned long millis)
-{	
-	int i;
-	for (i = 0; i < NUM_DEVICES; i++) {
-		if( millis == devices[i].next_match) {
-			devices[i].next_match = devices[i].next_match + dev_freq[i];
-			runqueue_add(devices[i].sleep_queue, 0);
-		}
-	}
-	dispatch_save();	
+void dev_update(unsigned long millis __attribute__((unused)))
+{
+	
 }
 
